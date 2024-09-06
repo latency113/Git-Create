@@ -114,7 +114,7 @@ INSERT INTO `order` (`orderID`, `customerID`, `employeeID`, `dateOrder`, `orderT
 
 CREATE TABLE `orderitem` (
   `itemID` int(5) NOT NULL COMMENT 'รหัสสั่งซื้อ',
-  `orderID` int(5) NOT NULL COMMENT 'รหัสสินค้า',
+  `orderID` int(5) NOT NULL COMMENT 'รหัสสั่งซื้อ',
   `prodID` int(5) NOT NULL COMMENT 'รหัสสินค้า'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -143,12 +143,12 @@ CREATE TABLE `product` (
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`prodID`, `cateID`, `prodName`, `quantity`, `price`) VALUES
-(1, 1, 'ขนมปัง', 99, 25),
-(2, 1, 'คุ๊กกี้', 99, 15),
-(3, 1, 'ครัวซอง', 99, 25),
-(4, 2, 'เค้กสตอเบอร์รี่\r\n', 99, 150),
-(5, 2, 'คัพเค้ก', 99, 20);
+INSERT INTO `product` (`prodID`, `cateID`, `prodName`, `price`) VALUES
+(1, 1, 'ขนมปัง', 25),
+(2, 1, 'คุ๊กกี้', 15),
+(3, 1, 'ครัวซอง', 25),
+(4, 2, 'เค้กสตอเบอร์รี่\r\n', 150),
+(5, 2, 'คัพเค้ก', 20);
 
 -- --------------------------------------------------------
 
@@ -157,9 +157,9 @@ INSERT INTO `product` (`prodID`, `cateID`, `prodName`, `quantity`, `price`) VALU
 --
 
 CREATE TABLE `stock` (
+  `stockID` int(5) NOT NULL COMMENT 'รหัสสต๊อก'',
   `prodID` int(5) NOT NULL COMMENT 'รหัสสินค้า',
-  `stockID` int(5) NOT NULL COMMENT 'รหัสสต๊อก',
-  `prodName` varchar(20) NOT NULL COMMENT 'ฃื่อสินค้า',
+  `prodName` varchar(20) NOT NULL COMMENT 'ชื่อสินค้า',
   `amountProd` int(5) NOT NULL COMMENT 'จำนวนสินค้า'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -167,12 +167,12 @@ CREATE TABLE `stock` (
 -- Dumping data for table `stock`
 --
 
-INSERT INTO `stock` (`prodID`, `stockID`, `prodName`, `amountProd`) VALUES
-(1, 1, 'ขนมปัง', 99),
-(2, 2, 'คุ๊กกี้', 99),
-(3, 3, 'ครัวซอง', 99),
-(4, 4, 'เค้กสตอเบอร์รี่', 99),
-(5, 5, 'คัพเค้ก', 99);
+INSERT INTO `stock` (`stockID`, `prodID`, `prodName`, `amountProd`) VALUES
+(10, 1, 'ขนมปังไส้สังขยา', 99),
+(20, 2, 'พายข้าวโพด', 99),
+(30, 3, 'ขนมปังกรอบหน้าเนย', 99),
+(40, 4, 'เค้กโรลสตอเบอร์รี่', 99),
+(50, 5, 'คัพเค้ก', 99);
 
 --
 -- Indexes for dumped tables
