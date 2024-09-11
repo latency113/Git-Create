@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 05, 2024 at 08:33 AM
+-- Generation Time: Sep 11, 2024 at 09:33 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -38,7 +38,8 @@ CREATE TABLE `category` (
 
 INSERT INTO `category` (`cateID`, `cateName`) VALUES
 (1, 'ขนมปัง'),
-(2, 'เค้ก');
+(2, 'เค้ก'),
+(3, 'พาย');
 
 -- --------------------------------------------------------
 
@@ -58,11 +59,11 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`customerID`, `name`, `address`, `phone`) VALUES
-(1, 'สมชาย ไมตรี', 'ดาวอังคาร 400 จังหวัดนครปฐม', '0912340000'),
-(2, 'ชาย ไมตรี', 'ดาวอังคาร 400 จังหวัดนครปฐม', '0912340000'),
-(3, 'ไมตรี สมชาย', 'ดาวอังคาร 400 จังหวัดนครปฐม', '0912340000'),
-(4, 'สมหญิง สวยมาก', 'ดาวอังคาร 400 จังหวัดนครปฐม', '0912340000'),
-(5, 'สมใจ สมชาย', 'ดาวอังคาร 400 จังหวัดนครปฐม', '0912340000');
+(1, 'สมชาย ไมตรี', '88/1 ห้วยจรเข้ จังหวัดนครปฐม 73000', '0912350232'),
+(2, 'ชาย ไมตรี', '25/1 สนามจันทร์ จังหวัดนครปฐม 73000', '0912360123'),
+(3, 'ไมตรี สมชาย', '25 ลำพยา จังหวัดนครปฐม 73000', '0912370240'),
+(4, 'สมหญิง สวยมาก', '99/9 ลำพยา จังหวัดนครปฐม 73000', '0912234600'),
+(5, 'สมใจ สมชาย', '64/7 สนามจันทร์ จังหวัดนครปฐม 73000', '0912364006');
 
 -- --------------------------------------------------------
 
@@ -135,8 +136,7 @@ CREATE TABLE `product` (
   `prodID` int(5) NOT NULL COMMENT 'รหัสสินค้า',
   `cateID` int(5) NOT NULL COMMENT 'รหัสประเภท',
   `prodName` varchar(40) NOT NULL COMMENT 'ฃื่อสินค้า',
-  `quantity` int(10) NOT NULL COMMENT 'ปริมาณ',
-  `price` decimal(65,0) NOT NULL COMMENT 'ราคา'
+  `price` int(3) NOT NULL COMMENT 'ราคา'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -145,10 +145,10 @@ CREATE TABLE `product` (
 
 INSERT INTO `product` (`prodID`, `cateID`, `prodName`, `price`) VALUES
 (1, 1, 'ขนมปัง', 25),
-(2, 1, 'คุ๊กกี้', 15),
-(3, 1, 'ครัวซอง', 25),
-(4, 2, 'เค้กสตอเบอร์รี่\r\n', 150),
-(5, 2, 'คัพเค้ก', 20);
+(2, 3, 'พายข้าวโพด ', 20),
+(3, 2, 'ขนมปังกรอบหน้าเนย', 25),
+(4, 1, 'เค้กสตอเบอร์รี่\r\n', 150),
+(5, 1, 'คัพเค้ก', 20);
 
 -- --------------------------------------------------------
 
@@ -157,10 +157,10 @@ INSERT INTO `product` (`prodID`, `cateID`, `prodName`, `price`) VALUES
 --
 
 CREATE TABLE `stock` (
-  `stockID` int(5) NOT NULL COMMENT 'รหัสสต๊อก'',
-  `prodID` int(5) NOT NULL COMMENT 'รหัสสินค้า',
-  `prodName` varchar(20) NOT NULL COMMENT 'ชื่อสินค้า',
-  `amountProd` int(5) NOT NULL COMMENT 'จำนวนสินค้า'
+  `stockID` int(5) NOT NULL,
+  `prodID` int(5) NOT NULL,
+  `prodName` varchar(20) NOT NULL,
+  `amountProd` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -201,23 +201,21 @@ ALTER TABLE `employee`
 --
 ALTER TABLE `order`
   ADD PRIMARY KEY (`orderID`),
-  ADD KEY `customerID` (`customerID`,`employeeID`),
-  ADD KEY `employeeID` (`employeeID`);
+  ADD KEY `customerID` (`customerID`,`employeeID`);
 
 --
 -- Indexes for table `orderitem`
 --
 ALTER TABLE `orderitem`
   ADD PRIMARY KEY (`itemID`),
-  ADD KEY `prodID` (`orderID`),
-  ADD KEY `prodID_2` (`prodID`);
+  ADD KEY `orderID` (`orderID`,`prodID`),
+  ADD KEY `prodID` (`prodID`);
 
 --
 -- Indexes for table `product`
 --
 ALTER TABLE `product`
-  ADD PRIMARY KEY (`prodID`),
-  ADD KEY `cateID` (`cateID`);
+  ADD PRIMARY KEY (`prodID`);
 
 --
 -- Indexes for table `stock`
@@ -231,46 +229,10 @@ ALTER TABLE `stock`
 --
 
 --
--- AUTO_INCREMENT for table `category`
---
-ALTER TABLE `category`
-  MODIFY `cateID` int(5) NOT NULL AUTO_INCREMENT COMMENT 'รหัสประเภท', AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `customer`
---
-ALTER TABLE `customer`
-  MODIFY `customerID` int(5) NOT NULL AUTO_INCREMENT COMMENT 'รหัสลูกค้า', AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `employee`
---
-ALTER TABLE `employee`
-  MODIFY `employeeID` int(5) NOT NULL AUTO_INCREMENT COMMENT 'รหัสพนักงาน', AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `order`
---
-ALTER TABLE `order`
-  MODIFY `orderID` int(5) NOT NULL AUTO_INCREMENT COMMENT 'รหัสสั่งซื้อ', AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `orderitem`
---
-ALTER TABLE `orderitem`
-  MODIFY `itemID` int(5) NOT NULL AUTO_INCREMENT COMMENT 'รหัสสั่งซื้อ', AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `product`
---
-ALTER TABLE `product`
-  MODIFY `prodID` int(5) NOT NULL AUTO_INCREMENT COMMENT 'รหัสสินค้า', AUTO_INCREMENT=8;
-
---
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `stockID` int(5) NOT NULL AUTO_INCREMENT COMMENT 'รหัสสต๊อก', AUTO_INCREMENT=6;
+  MODIFY `stockID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- Constraints for dumped tables
@@ -280,8 +242,7 @@ ALTER TABLE `stock`
 -- Constraints for table `order`
 --
 ALTER TABLE `order`
-  ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`customerID`) REFERENCES `customer` (`customerID`),
-  ADD CONSTRAINT `order_ibfk_2` FOREIGN KEY (`employeeID`) REFERENCES `employee` (`employeeID`);
+  ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`customerID`) REFERENCES `customer` (`customerID`);
 
 --
 -- Constraints for table `orderitem`
@@ -289,18 +250,6 @@ ALTER TABLE `order`
 ALTER TABLE `orderitem`
   ADD CONSTRAINT `orderitem_ibfk_1` FOREIGN KEY (`orderID`) REFERENCES `order` (`orderID`),
   ADD CONSTRAINT `orderitem_ibfk_2` FOREIGN KEY (`prodID`) REFERENCES `product` (`prodID`);
-
---
--- Constraints for table `product`
---
-ALTER TABLE `product`
-  ADD CONSTRAINT `product_ibfk_1` FOREIGN KEY (`cateID`) REFERENCES `category` (`cateID`);
-
---
--- Constraints for table `stock`
---
-ALTER TABLE `stock`
-  ADD CONSTRAINT `stock_ibfk_1` FOREIGN KEY (`prodID`) REFERENCES `product` (`prodID`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
